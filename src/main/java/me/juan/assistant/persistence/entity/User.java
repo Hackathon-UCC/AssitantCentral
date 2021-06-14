@@ -51,8 +51,8 @@ public class User {
 
     @SneakyThrows
     public User(TeamsChannelAccount teamsChannelAccount, TurnContext turnContext) {
-        this.alias = teamsChannelAccount.getName();
         this.name = teamsChannelAccount.getName();
+        this.alias = this.name;
         this.email = teamsChannelAccount.getEmail();
         this.id_teams = teamsChannelAccount.getId();
         this.role = Role.STUDENT;

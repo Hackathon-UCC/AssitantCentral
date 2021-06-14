@@ -41,8 +41,10 @@ public class UserManager {
 
     public static User getOrCreateUser(CompletableFuture<TeamsChannelAccount> teamsChannelAccount, TurnContext turnContext) {
         try {
-            return getOrCreateUser(teamsChannelAccount.get(), turnContext);
-        } catch (InterruptedException | ExecutionException e) {
+            TeamsChannelAccount teamsChannelAccount1 = teamsChannelAccount.get();
+            if(teamsChannelAccount1.getEmail() == null || teamsChannelAccount1.getName() == null) throw new IllegalStateException();
+            return getOrCreateUser(teamsChannelAccount1, turnContext);
+        } catch (InterruptedException | ExecutionException | IllegalStateException e) {
           //  e.printStackTrace(); // Se omite la exception para test.
         }
         return getOrCreateUser(CommonUtil.getTeamsChannelAccount(), turnContext);

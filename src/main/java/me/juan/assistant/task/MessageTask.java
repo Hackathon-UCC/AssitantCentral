@@ -2,6 +2,8 @@ package me.juan.assistant.task;
 
 import me.juan.assistant.manager.UserManager;
 
+import java.util.Collection;
+
 public class MessageTask extends Task {
 
     public MessageTask(long milliseconds) {
@@ -10,12 +12,13 @@ public class MessageTask extends Task {
 
     @Override
     public void onExecute() {
-        UserManager.getUserManagers().values().forEach((userManager) -> {
+        Collection<UserManager> values = UserManager.getUserManagers().values();
+        for (UserManager value : values) {
             try {
-                userManager.getMessageManager().send();
+                value.getMessageManager().send();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        });
+        }
     }
 }
