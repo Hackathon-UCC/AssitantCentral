@@ -59,7 +59,7 @@ public class Application extends BotDependencyConfiguration {
     }
 
     public void loadTasks() {
-        new MessageTask(250);
+        new MessageTask(100);
     }
 
     public void loadListeners() {

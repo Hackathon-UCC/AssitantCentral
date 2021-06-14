@@ -49,17 +49,21 @@ public class MessageManager {
     }
 
     public void send() {
+        try{ sendMessages(); }catch (Exception ignored){}
+    }
+
+    private void sendMessages() {
         if (outPuts.isEmpty()) return;
-        Activity message = outPuts.get(0);
-        outPuts.remove(message);
+        ArrayList<Activity> activities = new ArrayList<>(outPuts);
+        outPuts.removeAll(activities);
         if (turnContext != null) {
-            turnContext.sendActivity(message);
+            turnContext.sendActivities(activities);
             return;
         }
         Application.getBotFrameworkHttpAdapter().continueConversation(Application.getConfigurationFile().getProperty(
                 MicrosoftAppCredentials.MICROSOFTAPPID),
                 conversationReference,
-                turnContext -> turnContext.sendActivity(message).thenApply(resourceResponse -> null));
+                turnContext -> turnContext.sendActivities(activities).thenApply(resourceResponse -> null));
     }
 
     public MessageManager setTurnContext(TurnContext turnContext) {

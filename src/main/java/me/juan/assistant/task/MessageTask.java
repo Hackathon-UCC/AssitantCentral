@@ -10,12 +10,6 @@ public class MessageTask extends Task {
 
     @Override
     public void onExecute() {
-        for (MessageManager messageManager : MessageManager.getMessageManagers()) {
-            try {
-                messageManager.send();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        MessageManager.getMessageManagers().parallelStream().forEach(MessageManager::send);
     }
 }
