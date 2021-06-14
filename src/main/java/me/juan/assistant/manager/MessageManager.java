@@ -14,16 +14,19 @@ import java.util.Arrays;
 
 public class MessageManager {
 
-    private final ConversationReference conversationReference;
-    private final ArrayList<Activity> outPuts;
+    @Getter
+    private static final ArrayList<MessageManager> messageManagers = new ArrayList<>();
     @Getter
     private final ArrayList<String> inputs;
+    private final ConversationReference conversationReference;
+    private final ArrayList<Activity> outPuts;
     private TurnContext turnContext;
 
     public MessageManager(ConversationReference conversationReference) {
         this.conversationReference = conversationReference;
         this.outPuts = new ArrayList<>();
         this.inputs = new ArrayList<>();
+        messageManagers.add(this);
     }
 
     public String input() {

@@ -1,8 +1,6 @@
 package me.juan.assistant.task;
 
-import me.juan.assistant.manager.UserManager;
-
-import java.util.Collection;
+import me.juan.assistant.manager.MessageManager;
 
 public class MessageTask extends Task {
 
@@ -12,10 +10,9 @@ public class MessageTask extends Task {
 
     @Override
     public void onExecute() {
-        Collection<UserManager> values = UserManager.getUserManagers().values();
-        for (UserManager value : values) {
+        for (MessageManager messageManager : MessageManager.getMessageManagers()) {
             try {
-                value.getMessageManager().send();
+                messageManager.send();
             } catch (Exception e) {
                 e.printStackTrace();
             }

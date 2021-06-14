@@ -12,6 +12,7 @@ import com.microsoft.bot.integration.Configuration;
 import com.microsoft.bot.integration.spring.BotController;
 import com.microsoft.bot.integration.spring.BotDependencyConfiguration;
 import lombok.Getter;
+import me.juan.assistant.commands.MenuCommand;
 import me.juan.assistant.listener.ReceptionListener;
 import me.juan.assistant.manager.UserManager;
 import me.juan.assistant.persistence.entity.User;
@@ -56,11 +57,15 @@ public class Application extends BotDependencyConfiguration {
     }
 
     public void loadTasks() {
-        new MessageTask(180);
+        new MessageTask(100);
     }
 
     public void loadListeners() {
        // EventManager.registerEvent(new TestListener());
+    }
+
+    public void loadCommands() {
+        new MenuCommand();
     }
 
     public void loadRegisteredUsers() {
@@ -74,6 +79,7 @@ public class Application extends BotDependencyConfiguration {
         loadTasks();
         loadListeners();
         loadRegisteredUsers();
+        loadCommands();
         ReceptionListener receptionListener = new ReceptionListener();
         EventManager.registerEvent(receptionListener);
         return receptionListener;

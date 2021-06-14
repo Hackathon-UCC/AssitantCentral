@@ -8,6 +8,7 @@ import com.microsoft.bot.schema.teams.TeamsChannelAccount;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
+import me.juan.assistant.commands.Command;
 import me.juan.assistant.manager.MessageManager;
 import me.juan.assistant.manager.UserManager;
 import net.minidev.json.annotate.JsonIgnore;

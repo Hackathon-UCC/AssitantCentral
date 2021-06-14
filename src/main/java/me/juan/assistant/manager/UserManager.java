@@ -6,6 +6,7 @@ import com.microsoft.bot.schema.*;
 import com.microsoft.bot.schema.teams.TeamsChannelAccount;
 import lombok.Getter;
 import me.juan.assistant.Application;
+import me.juan.assistant.commands.Command;
 import me.juan.assistant.persistence.entity.Campus;
 import me.juan.assistant.persistence.entity.User;
 import me.juan.assistant.persistence.entity.UserCampus;
@@ -44,9 +45,7 @@ public class UserManager {
             TeamsChannelAccount teamsChannelAccount1 = teamsChannelAccount.get();
             if(teamsChannelAccount1.getEmail() == null || teamsChannelAccount1.getName() == null) throw new IllegalStateException();
             return getOrCreateUser(teamsChannelAccount1, turnContext);
-        } catch (InterruptedException | ExecutionException | IllegalStateException e) {
-          //  e.printStackTrace(); // Se omite la exception para test.
-        }
+        } catch (InterruptedException | ExecutionException | IllegalStateException e) { } // Se omite la exception para test.
         return getOrCreateUser(CommonUtil.getTeamsChannelAccount(), turnContext);
     }
 
@@ -86,5 +85,16 @@ public class UserManager {
                 new CardAction(ActionTypes.POST_BACK, "Action", "postBack"));
         user.sendMessage(MessageFactory.carousel(Collections.singletonList(heroCard.toAttachment()), null));
     }
+
+    public boolean checkCommand(String input) {
+        for (Command command : Command.getCommands()) {
+            if(command.getAliases().contains(input) || command.getCommand().equals(input)) {
+                command.execute(user, input);
+                return true;
+            }
+        }
+        return false;
+    }
+
 
 }

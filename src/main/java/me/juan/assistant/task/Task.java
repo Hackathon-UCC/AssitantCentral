@@ -15,15 +15,15 @@ public abstract class Task {
     }
 
     private void execute() {
-        try {
-            Thread.sleep(milliseconds);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            cancel();
-            return;
-        }
-        onExecute();
-        if (taskType == TaskType.EVERY) execute();
+        do {
+            try {
+                Thread.sleep(milliseconds);
+                onExecute();
+            } catch (Exception e) {
+                e.printStackTrace();
+                cancel();
+            }
+        } while (taskType == TaskType.EVERY && !thread.isInterrupted());
     }
 
     public void cancel() {

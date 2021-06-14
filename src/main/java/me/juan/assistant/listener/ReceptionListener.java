@@ -22,13 +22,8 @@ public class ReceptionListener extends ActivityHandler implements Listener {
     public void onMessageEvent(MessageEvent e) {
         String message = e.getText().toLowerCase();
         User user = e.getUser();
-        if (message.contains("ayuda")) {
-            user.sendMessage("Puedes colocar 'menu' para revisar el menu!");
-        } else if (message.contains("menu") || message.contains("opciones")) {
-            user.getManager().sendMenu();
-        } else {
-            user.sendMessage("No encontramos ningun comando asociado a esa accion.");
-        }
+        if (user.getManager().checkCommand(message)) return;
+        user.sendMessage("No encontramos ningún comando asociado a esa accion.", "Prueba diciendo 'menu'");
     }
 
     @Override
