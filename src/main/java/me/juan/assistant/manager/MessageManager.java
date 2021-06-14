@@ -10,7 +10,6 @@ import me.juan.assistant.Application;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
 
 
 public class MessageManager {
@@ -28,11 +27,7 @@ public class MessageManager {
     }
 
     public String input() {
-        while (outPuts.isEmpty()) {
-
-        }
         return inputs.get(0);
-
     }
 
     public MessageManager sendMessage(String msg) {

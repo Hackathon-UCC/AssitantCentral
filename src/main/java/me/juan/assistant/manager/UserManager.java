@@ -14,8 +14,6 @@ import me.juan.assistant.persistence.repository.UserCampusRepository;
 import me.juan.assistant.persistence.repository.UserRepository;
 import me.juan.assistant.utils.CommonUtil;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
@@ -45,7 +43,7 @@ public class UserManager {
         try {
             return getOrCreateUser(teamsChannelAccount.get(), turnContext);
         } catch (InterruptedException | ExecutionException e) {
-          //  e.printStackTrace();
+          //  e.printStackTrace(); // Se omite la exception para test.
         }
         return getOrCreateUser(CommonUtil.getTeamsChannelAccount(), turnContext);
     }
@@ -79,14 +77,12 @@ public class UserManager {
     }
 
     public void sendMenu() {
-
-
-        //HeroCard heroCard = new HeroCard();
-        //heroCard.setTitle("TITLE");
-      //  heroCard.setImages(new CardImage("https://media.kingston.com/kingston/articles/sdcs-diy5-ep96.jpg"),new CardImage("https://media.kingston.com/kingston/articles/sdcs-diy5-ep96.jpg"),new CardImage("https://media.kingston.com/kingston/articles/sdcs-diy5-ep96.jpg"));
-        //heroCard.setButtons(new CardAction(ActionTypes.POST_BACK, "Action", "postBack"));
-
-       // user.sendMessage(MessageFactory.carousel(Collections.singletonList(heroCard.toAttachment()), null));
+        HeroCard heroCard = new HeroCard();
+        heroCard.setTitle("TITLE");
+        heroCard.setButtons(new CardAction(ActionTypes.POST_BACK, "Action", "postBack"),
+                new CardAction(ActionTypes.POST_BACK, "Action", "postBack"),new CardAction(ActionTypes.POST_BACK, "Action", "postBack"),
+                new CardAction(ActionTypes.POST_BACK, "Action", "postBack"));
+        user.sendMessage(MessageFactory.carousel(Collections.singletonList(heroCard.toAttachment()), null));
     }
 
 }
