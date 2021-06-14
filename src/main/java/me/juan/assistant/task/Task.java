@@ -1,6 +1,8 @@
 package me.juan.assistant.task;
 
 
+import me.juan.assistant.Application;
+
 public abstract class Task {
 
     private final TaskType taskType;

@@ -7,6 +7,7 @@ import com.microsoft.bot.schema.ConversationReference;
 import com.microsoft.bot.schema.teams.TeamsChannelAccount;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import me.juan.assistant.commands.Command;
 import me.juan.assistant.manager.MessageManager;
@@ -22,6 +23,7 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 @Getter
+@Setter
 @NoArgsConstructor
 public class User {
 

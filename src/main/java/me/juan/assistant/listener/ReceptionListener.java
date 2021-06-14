@@ -33,13 +33,4 @@ public class ReceptionListener extends ActivityHandler implements Listener {
         EventManager.callEvent(new MessageEvent(user, turnContext.getActivity().getText(), turnContext));
         return super.onMessageActivity(turnContext);
     }
-
-    @Override
-    protected CompletableFuture<Void> onMembersAdded(List<ChannelAccount> membersAdded, TurnContext turnContext) {
-        if(turnContext.getActivity().getConversationReference().getConversation().isGroup()) return super.onMembersAdded(membersAdded, turnContext);
-        membersAdded.stream().filter(channelAccount -> !StringUtils.equals(channelAccount.getId(), turnContext.getActivity().getRecipient().getId())).forEach(channelAccount ->  UserManager.getOrCreateUser(TeamsInfo.getMember(turnContext, turnContext.getActivity().getFrom().getId()), turnContext));
-        return super.onMembersAdded(membersAdded, turnContext);
-    }
-
-
 }

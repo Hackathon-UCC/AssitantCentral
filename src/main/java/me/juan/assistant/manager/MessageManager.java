@@ -29,10 +29,6 @@ public class MessageManager {
         messageManagers.add(this);
     }
 
-    public String input() {
-        return inputs.get(0);
-    }
-
     public MessageManager sendMessage(String msg) {
         return sendMessage(MessageFactory.text(msg));
     }

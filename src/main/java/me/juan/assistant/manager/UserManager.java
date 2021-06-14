@@ -77,15 +77,6 @@ public class UserManager {
         return user;
     }
 
-    public void sendMenu() {
-        HeroCard heroCard = new HeroCard();
-        heroCard.setTitle("TITLE");
-        heroCard.setButtons(new CardAction(ActionTypes.POST_BACK, "Action", "postBack"),
-                new CardAction(ActionTypes.POST_BACK, "Action", "postBack"),new CardAction(ActionTypes.POST_BACK, "Action", "postBack"),
-                new CardAction(ActionTypes.POST_BACK, "Action", "postBack"));
-        user.sendMessage(MessageFactory.carousel(Collections.singletonList(heroCard.toAttachment()), null));
-    }
-
     public boolean checkCommand(String input) {
         for (Command command : Command.getCommands()) {
             if(command.getAliases().contains(input) || command.getCommand().equals(input)) {
