@@ -80,7 +80,8 @@ public class UserManager {
     public boolean checkCommand(String input) {
         for (Command command : Command.getCommands()) {
             if(command.getAliases().contains(input) || command.getCommand().equals(input)) {
-                command.execute(user, input);
+                user.getMessageManager().getInputs().clear();
+                command.onCall(user, input);
                 return true;
             }
         }

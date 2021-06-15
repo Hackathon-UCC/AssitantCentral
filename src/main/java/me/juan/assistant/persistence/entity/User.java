@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.SneakyThrows;
+import me.juan.assistant.manager.MessageManager;
 import me.juan.assistant.manager.UserManager;
 import net.minidev.json.annotate.JsonIgnore;
 
@@ -85,17 +86,25 @@ public class User {
     }
 
     public void sendMessage(String msg) {
-        getManager().getMessageManager().sendMessage(msg);
+        getMessageManager().sendMessage(msg);
     }
 
     public void sendMessage(String... a) {
-        getManager().getMessageManager().sendMessage(a);
+        getMessageManager().sendMessage(a);
     }
 
-    public void sendMessage(Activity a) { getManager().getMessageManager().sendMessage(a); }
+    public void sendMessage(Activity a) { getMessageManager().sendMessage(a); }
 
     public void sendMessage(Activity... a) {
-        getManager().getMessageManager().sendMessage(a);
+        getMessageManager().sendMessage(a);
+    }
+
+    public MessageManager getMessageManager() {
+        return getManager().getMessageManager();
+    }
+
+    public String input() {
+        return getMessageManager().input();
     }
 
     @JsonIgnore

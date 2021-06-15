@@ -13,6 +13,8 @@ public abstract class Command {
 
     @Getter
     private static final ArrayList<Command> commands = new ArrayList<>();
+    @Getter
+    private static final ArrayList<User> UsersOnCommand = new ArrayList<>();
     private final List<String> aliases;
     private final String command, description;
     private final ArrayList<Role> roles;
@@ -28,7 +30,8 @@ public abstract class Command {
     }
 
     public void onCall(User user, String command) {
-        new Thread(() -> execute(user, command)).start();
+        UsersOnCommand.add(user);
+        new Thread(() -> { execute(user, command);UsersOnCommand.remove(user); }).start();
     }
 
     public abstract void execute(User user, String command);

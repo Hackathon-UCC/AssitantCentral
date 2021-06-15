@@ -29,6 +29,29 @@ public class MessageManager {
         messageManagers.add(this);
     }
 
+    public void input(String input) {
+        synchronized (inputs) {
+            inputs.add(input);
+            inputs.notifyAll();
+        }
+    }
+
+    public String input() {
+        synchronized (inputs) {
+            while (inputs.isEmpty()) {
+                try {
+                    inputs.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    return input();
+                }
+            }
+            String message = inputs.get(0);
+            inputs.remove(message);
+            return message;
+        }
+    }
+
     public MessageManager sendMessage(String msg) {
         return sendMessage(MessageFactory.text(msg));
     }
