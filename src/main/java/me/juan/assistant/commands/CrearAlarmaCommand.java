@@ -1,11 +1,14 @@
 package me.juan.assistant.commands;
 
-import me.juan.assistant.Application;
 import me.juan.assistant.event.MessageEvent;
 import me.juan.assistant.persistence.entity.User;
-import me.juan.event.*;
+import me.juan.event.EventHandler;
+import me.juan.event.EventManager;
+import me.juan.event.EventPriority;
+import me.juan.event.Listener;
 
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class CrearAlarmaCommand extends Command {
 
@@ -31,12 +34,8 @@ public class CrearAlarmaCommand extends Command {
         @EventHandler(priority = EventPriority.LOW)
         public void onMessageEvent(MessageEvent e) {
             User user = e.getUser();
-            if(user.getId().equals(this.user.getId())) {
+            if(user.equals(this.user)) {
                 e.setCancelled(true);
-
-                user.setAlias("sad");
-                Application.getInstance().getUserRepository().save(user);
-
                 String text = e.getText();
                 if (fecha != null) {
                     if(!text.contains(":")) {

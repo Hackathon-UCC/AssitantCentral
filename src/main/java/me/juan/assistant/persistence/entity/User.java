@@ -9,14 +9,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.SneakyThrows;
-import me.juan.assistant.commands.Command;
-import me.juan.assistant.manager.MessageManager;
 import me.juan.assistant.manager.UserManager;
 import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -107,4 +104,8 @@ public class User {
         return domainSplit.length == 2 ? domainSplit[1] : email;
     }
 
+    @Override
+    public boolean equals(Object user) {
+        return ((User) user).getId().equals(getId());
+    }
 }
