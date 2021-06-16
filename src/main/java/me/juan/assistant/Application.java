@@ -12,7 +12,8 @@ import com.microsoft.bot.integration.Configuration;
 import com.microsoft.bot.integration.spring.BotController;
 import com.microsoft.bot.integration.spring.BotDependencyConfiguration;
 import lombok.Getter;
-import me.juan.assistant.commands.CrearAlarmaCommand;
+import me.juan.assistant.commands.AlarmCommand;
+import me.juan.assistant.commands.CityCommand;
 import me.juan.assistant.commands.MenuCommand;
 import me.juan.assistant.listener.ReceptionListener;
 import me.juan.assistant.manager.UserManager;
@@ -67,7 +68,8 @@ public class Application extends BotDependencyConfiguration {
 
     public void loadCommands() {
         new MenuCommand();
-        new CrearAlarmaCommand();
+        new AlarmCommand();
+        new CityCommand();
     }
 
     public void loadRegisteredUsers() {

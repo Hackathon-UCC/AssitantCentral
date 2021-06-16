@@ -25,6 +25,7 @@ public class ReceptionListener extends ActivityHandler implements Listener {
             user.getMessageManager().input(message);
             return;
         }
+        if(message.contains("{") || message.contains("}") || message.contains("=")) return;
         if (user.getManager().checkCommand(message.toLowerCase())) return;
         user.sendMessage("No encontramos ningún comando asociado a esa accion.", "Prueba diciendo 'menu'");
     }
@@ -35,7 +36,12 @@ public class ReceptionListener extends ActivityHandler implements Listener {
         if (activity.getConversationReference().getConversation().isGroup()) return super.onMessageActivity(turnContext);
         User user = UserManager.getOrCreateUser(TeamsInfo.getMember(turnContext, activity.getFrom().getId()), turnContext);
         String message = activity.getText() == null ? activity.getValue().toString() : activity.getText();
-        EventManager.callEvent(new MessageEvent(user, message, turnContext));
+        if(user == null) return super.onMessageActivity(turnContext); //Cuando el usuario se registra por primera vez.
+        if(user.isRegistering()) {
+            user.getMessageManager().input(message);
+            return super.onMessageActivity(turnContext);
+        }
+        EventManager.callEvent(new MessageEvent(user, message, activity.getFrom().getId(), turnContext));
         return super.onMessageActivity(turnContext);
     }
 }

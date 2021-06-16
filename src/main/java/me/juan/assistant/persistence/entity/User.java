@@ -1,5 +1,6 @@
 package me.juan.assistant.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.gson.Gson;
 import com.microsoft.bot.builder.TurnContext;
 import com.microsoft.bot.schema.Activity;
@@ -9,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.SneakyThrows;
+import lombok.experimental.Accessors;
 import me.juan.assistant.manager.MessageManager;
 import me.juan.assistant.manager.UserManager;
 import net.minidev.json.annotate.JsonIgnore;
@@ -23,6 +25,8 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@Accessors(chain = true)
 public class User {
 
     @Getter
@@ -34,7 +38,7 @@ public class User {
     private String alias;
     private String name;
     private String email;
-    private boolean active;
+    private Boolean active;
 
     @Column(columnDefinition = "ENUM('STUDENT', 'TEACHER', 'ADMINISTRATOR')")
     @Enumerated(EnumType.STRING)
@@ -43,6 +47,8 @@ public class User {
     private Timestamp registered_at;
     private Timestamp updated_at;
     private String id_teams;
+    private String city;
+    private String phone;
 
     @Column(name = "conversation_reference")
     private String conversationReference;
@@ -60,6 +66,7 @@ public class User {
         this.registered_at = new Timestamp(System.currentTimeMillis());
         this.updated_at = this.registered_at;
         this.conversationReference = new Gson().toJson(turnContext.getActivity().getConversationReference());
+        this.active = true;
     }
 
     private Campus getCampus() {
@@ -107,6 +114,10 @@ public class User {
 
     public String input() {
         return getMessageManager().input();
+    }
+
+    public boolean isRegistering() {
+        return UserManager.getUsersRegistering().containsKey(email);
     }
 
     @JsonIgnore

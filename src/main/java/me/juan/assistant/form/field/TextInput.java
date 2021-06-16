@@ -10,9 +10,10 @@ import me.juan.assistant.form.FormField;
 @Accessors(chain = true)
 public class TextInput extends FormField {
 
-    private final String style = "text";
+    private String style = "text";
+    private Integer maxLength;
     private Boolean isRequired = null, isMultiline = null;
-    private String placeholder, label, errorMessage;
+    private String placeholder, label, errorMessage, regex;
     private Object value;
 
     public TextInput() {

@@ -13,9 +13,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 
-public class CrearAlarmaCommand extends Command {
+public class AlarmCommand extends Command {
 
-    public CrearAlarmaCommand() {
+    public AlarmCommand() {
         super(Arrays.asList("despertarme", "alarma"), "crear alarma", "Crear una alarma", null, "Crear una alarma");
     }
 

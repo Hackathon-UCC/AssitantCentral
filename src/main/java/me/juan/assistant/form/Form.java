@@ -39,9 +39,10 @@ public class Form {
     public Map<String, String> response(User user) {
         String input = user.input();
         while(!(input.contains("{") || input.contains("}") || input.contains("="))) { input = user.input(); }
-        input = input.replaceAll("}", "").replaceAll("\\{", "").replaceAll(",", "");
+        input = input.replaceAll("}", "").replaceAll("\\{", "").replaceAll(",", "?");
+
         HashMap<String, String> objectObjectHashMap = new HashMap<>();
-        Arrays.stream(input.split(" ")).parallel().forEach(s -> { String[] split1 = s.split("=");objectObjectHashMap.put(split1[0], split1[1]); });
+        Arrays.stream(input.split("\\?")).parallel().forEach(s -> { String[] split1 = s.split("=");objectObjectHashMap.put(split1[0].replace(" ", ""), split1[1]); });
         Object formId = objectObjectHashMap.getOrDefault("formId", null);
         if(formId == null || !formId.equals(this.formId.toString())) return response(user);
         return objectObjectHashMap;

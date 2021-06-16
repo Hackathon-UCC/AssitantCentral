@@ -8,18 +8,20 @@ import me.juan.event.Event;
 import me.juan.event.HandlerList;
 
 @Getter
+
 public class MessageEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
-    private final TurnContext turnContext;
-    private final String text;
     private final User user;
+    private final String text, userChannelId;
+    private final TurnContext turnContext;
     private boolean cancel;
 
-    public MessageEvent(User user, String text, TurnContext turnContext) {
-        this.turnContext = turnContext;
-        this.text = text;
+    public MessageEvent(User user, String text, String userChannelId, TurnContext turnContext) {
         this.user = user;
+        this.text = text;
+        this.userChannelId = userChannelId;
+        this.turnContext = turnContext;
     }
 
     public static HandlerList getHandlerList() {

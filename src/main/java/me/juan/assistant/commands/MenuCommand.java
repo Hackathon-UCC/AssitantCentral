@@ -1,15 +1,10 @@
 package me.juan.assistant.commands;
 
 import com.microsoft.bot.builder.MessageFactory;
-import com.microsoft.bot.schema.Attachment;
-import com.microsoft.bot.schema.CardAction;
-import com.microsoft.bot.schema.HeroCard;
+import com.microsoft.bot.schema.*;
 import me.juan.assistant.persistence.entity.User;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MenuCommand extends Command {
@@ -20,19 +15,12 @@ public class MenuCommand extends Command {
 
     @Override
     public void execute(User user, String command) {
-
-        /*String content = null;
-        try {
-            File file = ResourceUtils.getFile(ResourceUtils.CLASSPATH_URL_PREFIX + "card.json");
-            content = new String(Files.readAllBytes(file.toPath()));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
-        HeroCard heroCard = new HeroCard();
-        heroCard.setText("texto");
+        ThumbnailCard heroCard = new ThumbnailCard();
         heroCard.setTitle("•  Menu principal  •");
-        heroCard.setSubtitle(String.valueOf(new Date()));
-        heroCard.setButtons(getCommands().stream().map(Command::getCardAction).filter(Objects::nonNull).collect(Collectors.toCollection(ArrayList::new)));
+        heroCard.setSubtitle("Hola "+user.getAlias()+", ¿Que quieres hacer?");
+        heroCard.setText(String.valueOf(new Date()));
+        heroCard.setImage(new CardImage("https://i.ibb.co/q772ycZ/icons8-menu-1080px.png"));
+        heroCard.setButtons(getCommands().stream().filter(cmand -> cmand.isAvailable(user)).map(Command::getCardAction).filter(Objects::nonNull).sorted(Comparator.comparing(CardAction::getTitle)).collect(Collectors.toCollection(ArrayList::new)));
         user.sendMessage(MessageFactory.attachment(heroCard.toAttachment()));
     }
 
