@@ -1,5 +1,6 @@
 package me.juan.assistant.commands;
 
+import com.microsoft.bot.schema.ActionTypes;
 import com.microsoft.bot.schema.CardAction;
 import lombok.Getter;
 import me.juan.assistant.persistence.entity.Role;
@@ -20,6 +21,10 @@ public abstract class Command {
     private final ArrayList<Role> roles;
     private final CardAction cardAction;
 
+    public Command(List<String> aliases, String command, String description, ArrayList<Role> roles, String displayMenu) {
+        this(aliases, command, description, roles, new CardAction(ActionTypes.IM_BACK, displayMenu, command));
+    }
+
     public Command(List<String> aliases, String command, String description, ArrayList<Role> roles, CardAction cardAction) {
         this.aliases = aliases;
         this.command = command;
@@ -31,7 +36,10 @@ public abstract class Command {
 
     public void onCall(User user, String command) {
         UsersOnCommand.add(user);
-        new Thread(() -> { execute(user, command);UsersOnCommand.remove(user); }).start();
+        new Thread(() -> {
+            execute(user, command);
+            UsersOnCommand.remove(user);
+        }).start();
     }
 
     public abstract void execute(User user, String command);

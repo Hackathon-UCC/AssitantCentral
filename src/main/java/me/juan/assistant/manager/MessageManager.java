@@ -57,7 +57,9 @@ public class MessageManager {
     }
 
     public MessageManager sendMessage(String... a) {
-        for (String s : a) { outPuts.add(MessageFactory.text(s)); }
+        for (String s : a) {
+            outPuts.add(MessageFactory.text(s));
+        }
         return this;
     }
 
@@ -72,7 +74,10 @@ public class MessageManager {
     }
 
     public void send() {
-        try{ sendMessages(); }catch (Exception ignored){}
+        try {
+            sendMessages();
+        } catch (Exception ignored) {
+        }
     }
 
     private void sendMessages() {

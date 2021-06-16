@@ -93,7 +93,9 @@ public class User {
         getMessageManager().sendMessage(a);
     }
 
-    public void sendMessage(Activity a) { getMessageManager().sendMessage(a); }
+    public void sendMessage(Activity a) {
+        getMessageManager().sendMessage(a);
+    }
 
     public void sendMessage(Activity... a) {
         getMessageManager().sendMessage(a);

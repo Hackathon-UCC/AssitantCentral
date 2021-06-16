@@ -1,8 +1,7 @@
 package me.juan.assistant.manager;
 
-import com.microsoft.bot.builder.MessageFactory;
 import com.microsoft.bot.builder.TurnContext;
-import com.microsoft.bot.schema.*;
+import com.microsoft.bot.schema.ConversationReference;
 import com.microsoft.bot.schema.teams.TeamsChannelAccount;
 import lombok.Getter;
 import me.juan.assistant.Application;
@@ -15,7 +14,6 @@ import me.juan.assistant.persistence.repository.UserCampusRepository;
 import me.juan.assistant.persistence.repository.UserRepository;
 import me.juan.assistant.utils.CommonUtil;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -43,9 +41,11 @@ public class UserManager {
     public static User getOrCreateUser(CompletableFuture<TeamsChannelAccount> teamsChannelAccount, TurnContext turnContext) {
         try {
             TeamsChannelAccount teamsChannelAccount1 = teamsChannelAccount.get();
-            if(teamsChannelAccount1.getEmail() == null || teamsChannelAccount1.getName() == null) throw new IllegalStateException();
+            if (teamsChannelAccount1.getEmail() == null || teamsChannelAccount1.getName() == null)
+                throw new IllegalStateException();
             return getOrCreateUser(teamsChannelAccount1, turnContext);
-        } catch (InterruptedException | ExecutionException | IllegalStateException e) { } // Se omite la exception para test.
+        } catch (InterruptedException | ExecutionException | IllegalStateException e) {
+        } // Se omite la exception para test.
         return getOrCreateUser(CommonUtil.getTeamsChannelAccount(), turnContext);
     }
 
@@ -70,7 +70,7 @@ public class UserManager {
             turnContext.sendActivity("Ocurrio un error inesperado!, Lo estamos resolviendo...");
             throw new IllegalStateException("User not found.");
         }
-        MessageManager messageManager = user.getManager().getMessageManager().setTurnContext(turnContext).sendMessage("Bienvenido " + user.getAlias()+ ", ¿Como va tu dia?", "Estamos configurando todo. Esto no tardara mucho...");
+        MessageManager messageManager = user.getManager().getMessageManager().setTurnContext(turnContext).sendMessage("Bienvenido " + user.getAlias() + ", ¿Como va tu dia?", "Estamos configurando todo. Esto no tardara mucho...");
         Campus campus = campusRepository.findCampusByDomainIgnoreCase(user.getDomain()).orElse(null);
         if (campus != null) userCampusRepository.save(new UserCampus(user.getId(), campus.getId()));
         messageManager.sendMessage(campus != null ? "Registrado con: " + campus.getDisplayName() : "No encontramos una universidad asociado a tu correo electronico.", "Todo listo!", "¿Que quieres hacer hoy?");
@@ -79,7 +79,7 @@ public class UserManager {
 
     public boolean checkCommand(String input) {
         for (Command command : Command.getCommands()) {
-            if(command.getAliases().contains(input) || command.getCommand().equals(input)) {
+            if (command.getAliases().contains(input) || command.getCommand().equals(input)) {
                 user.getMessageManager().getInputs().clear();
                 command.onCall(user, input);
                 return true;

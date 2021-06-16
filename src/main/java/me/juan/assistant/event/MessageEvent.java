@@ -11,10 +11,10 @@ import me.juan.event.HandlerList;
 public class MessageEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
-    private boolean cancel;
     private final TurnContext turnContext;
     private final String text;
     private final User user;
+    private boolean cancel;
 
     public MessageEvent(User user, String text, TurnContext turnContext) {
         this.turnContext = turnContext;

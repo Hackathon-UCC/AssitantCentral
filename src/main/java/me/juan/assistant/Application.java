@@ -12,7 +12,6 @@ import com.microsoft.bot.integration.Configuration;
 import com.microsoft.bot.integration.spring.BotController;
 import com.microsoft.bot.integration.spring.BotDependencyConfiguration;
 import lombok.Getter;
-import lombok.SneakyThrows;
 import me.juan.assistant.commands.CrearAlarmaCommand;
 import me.juan.assistant.commands.MenuCommand;
 import me.juan.assistant.listener.ReceptionListener;
@@ -63,7 +62,7 @@ public class Application extends BotDependencyConfiguration {
     }
 
     public void loadListeners() {
-     //  EventManager.registerEvent(new AlgoListener());
+        //  EventManager.registerEvent(new AlgoListener());
     }
 
     public void loadCommands() {

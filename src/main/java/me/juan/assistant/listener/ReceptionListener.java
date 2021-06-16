@@ -3,6 +3,7 @@ package me.juan.assistant.listener;
 import com.microsoft.bot.builder.ActivityHandler;
 import com.microsoft.bot.builder.TurnContext;
 import com.microsoft.bot.builder.teams.TeamsInfo;
+import com.microsoft.bot.schema.Activity;
 import me.juan.assistant.commands.Command;
 import me.juan.assistant.event.MessageEvent;
 import me.juan.assistant.manager.UserManager;
@@ -20,7 +21,7 @@ public class ReceptionListener extends ActivityHandler implements Listener {
     public void onMessageEvent(MessageEvent e) {
         String message = e.getText();
         User user = e.getUser();
-        if(Command.getUsersOnCommand().contains(user)) {
+        if (Command.getUsersOnCommand().contains(user)) {
             user.getMessageManager().input(message);
             return;
         }
@@ -30,9 +31,11 @@ public class ReceptionListener extends ActivityHandler implements Listener {
 
     @Override
     protected CompletableFuture<Void> onMessageActivity(TurnContext turnContext) {
-        if(turnContext.getActivity().getConversationReference().getConversation().isGroup()) return super.onMessageActivity(turnContext);
-        User user = UserManager.getOrCreateUser(TeamsInfo.getMember(turnContext, turnContext.getActivity().getFrom().getId()), turnContext);
-        EventManager.callEvent(new MessageEvent(user, turnContext.getActivity().getText(), turnContext));
+        Activity activity = turnContext.getActivity();
+        if (activity.getConversationReference().getConversation().isGroup()) return super.onMessageActivity(turnContext);
+        User user = UserManager.getOrCreateUser(TeamsInfo.getMember(turnContext, activity.getFrom().getId()), turnContext);
+        String message = activity.getText() == null ? activity.getValue().toString() : activity.getText();
+        EventManager.callEvent(new MessageEvent(user, message, turnContext));
         return super.onMessageActivity(turnContext);
     }
 }
