@@ -80,9 +80,9 @@ public class UserManager {
         messageManager.sendMessage("Hola, "+teamsChannelAccount.getName()+", bienvenido!, Soy Bootsoo, tu asistente. Ahora vamos a configurar todo. Esto no tardara mucho...", "");
         Map<String, String> send = new Form("Configuracion de Botsoo", new TextBlock("Antes de empezar nuestra aventura necesitamos unos datos iniciales...")
                 .setSubtle(true).setSpacing("large"),
-                new TextInput().setLabel("¿Como quieres que te llame?").setMaxLength(16).setRegex("^[ a-zA-Z0-9_.-]{6,16}$").setRequired("Apodo invalido.").setId("Apodo"),
-                new TextInput().setLabel("¿Cual es tu numero celular?").setMaxLength(10).setRegex("^[0-9]{10,10}$").setStyle("tel").setRequired("Celular Invalido.").setId("Celular"),
-                new SelectionInput().setLabel("Selecciona tu campus:").setRequired("Campus invalido.").setChoices(Cities.getCities()).setId("Ciudad")).setActions(
+                new TextInput().setLabel("¿Como quieres que te llame?").setPlaceholder("Como quieres que te llame?").setMaxLength(16).setRegex("^[ a-zA-Z0-9_.-]{6,16}$").setRequired("Apodo invalido.").setId("Apodo"),
+                new TextInput().setLabel("¿Cual es tu numero celular?").setPlaceholder("¿Cual es tu numero celular?").setMaxLength(10).setRegex("^[0-9]{10,10}$").setStyle("tel").setRequired("Celular Invalido.").setId("Celular"),
+                new SelectionInput().setLabel("Selecciona tu campus:").setPlaceholder("Selecciona tu campus:").setRequired("Campus invalido.").setChoices(Cities.getCities()).setId("Ciudad")).setActions(
                 new Action(FieldType.ACTION_SUBMIT, "REGISTRARSE").setStyle("positive")).send(user);
         String apodo = send.get("Apodo"), celular = send.get("Celular"), ciudad = send.get("Ciudad");
         user.sendMessage("Perfecto, ahora vamos a validar tus datos...");

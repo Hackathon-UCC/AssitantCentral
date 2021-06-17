@@ -4,6 +4,7 @@ import com.microsoft.bot.builder.MessageFactory;
 import com.microsoft.bot.schema.ActionTypes;
 import com.microsoft.bot.schema.CardAction;
 import lombok.Getter;
+import me.juan.assistant.form.Form;
 import me.juan.assistant.manager.UserManager;
 import me.juan.assistant.persistence.entity.Role;
 import me.juan.assistant.persistence.entity.User;
@@ -45,7 +46,7 @@ public abstract class Command {
             if(Command.this.cardAction != null) {
                 user.sendMessage(MessageFactory.suggestedCardActions(Arrays.asList(new CardAction(ActionTypes.IM_BACK, "Sí", "Si"), new CardAction(ActionTypes.IM_BACK, "No", "No")), "¿Te puedo ayudar en algo mas?"));
                 String input = user.input();
-                user.sendMessage(input.equalsIgnoreCase("no") ? "Dale!, que tengas un dia espectacular!" : (input.equalsIgnoreCase("si") ? "Es un placer!" : "No te entendí muy bien"));
+                             user.sendMessage(input.equalsIgnoreCase("no") ? "Dale!, que tengas un dia espectacular!" : (input.equalsIgnoreCase("si") ? "Es un placer!" : "No te entendí muy bien"));
                 UsersOnCommand.remove(user);
                 if(input.equalsIgnoreCase("si")) new Thread(() -> user.getManager().checkCommand("menu")).start();
                 return;
