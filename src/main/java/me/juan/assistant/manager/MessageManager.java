@@ -6,12 +6,15 @@ import com.microsoft.bot.connector.authentication.MicrosoftAppCredentials;
 import com.microsoft.bot.schema.Activity;
 import com.microsoft.bot.schema.ConversationReference;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import me.juan.assistant.Application;
+import me.juan.assistant.persistence.entity.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-
+@Accessors(chain = true)
 public class MessageManager {
 
     @Getter
@@ -20,10 +23,13 @@ public class MessageManager {
     private final ArrayList<String> inputs;
     private final ConversationReference conversationReference;
     private final ArrayList<Activity> outPuts;
+    private final User user;
+    @Setter
     private TurnContext turnContext;
 
-    public MessageManager(ConversationReference conversationReference) {
+    public MessageManager(ConversationReference conversationReference, User user) {
         this.conversationReference = conversationReference;
+        this.user = user;
         this.outPuts = new ArrayList<>();
         this.inputs = new ArrayList<>();
         messageManagers.add(this);
@@ -37,6 +43,7 @@ public class MessageManager {
     }
 
     public String input() {
+        user.getManager().setWaitingInput(true);
         synchronized (inputs) {
             while (inputs.isEmpty()) {
                 try {
@@ -48,54 +55,47 @@ public class MessageManager {
             }
             String message = inputs.get(0);
             inputs.remove(message);
+            user.getManager().setWaitingInput(false);
             return message;
         }
     }
 
-    public MessageManager sendMessage(String msg) {
-        return sendMessage(MessageFactory.text(msg));
+    public void sendMessage(String msg) {
+        sendMessage(MessageFactory.text(msg));
     }
 
-    public MessageManager sendMessage(String... a) {
-        for (String s : a) {
-            outPuts.add(MessageFactory.text(s));
-        }
-        return this;
+    public void sendMessage(String... a) {
+        for (String s : a) { outPuts.add(MessageFactory.text(s)); }
     }
 
-    public MessageManager sendMessage(Activity msg) {
+    public void sendMessage(ArrayList<Activity> activities) {
+        outPuts.addAll(activities);
+    }
+
+    public void sendMessage(Activity msg) {
         outPuts.add(msg);
-        return this;
     }
 
-    public MessageManager sendMessage(Activity... a) {
+    public void sendMessage(Activity... a) {
         outPuts.addAll(Arrays.asList(a));
-        return this;
     }
 
     public void send() {
         try {
             sendMessages();
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     private void sendMessages() {
         if (outPuts.isEmpty()) return;
         ArrayList<Activity> activities = new ArrayList<>(outPuts);
-        outPuts.removeAll(activities);
+        outPuts.clear();
         if (turnContext != null) {
             turnContext.sendActivities(activities);
             return;
         }
-        Application.getBotFrameworkHttpAdapter().continueConversation(Application.getConfigurationFile().getProperty(
-                MicrosoftAppCredentials.MICROSOFTAPPID),
-                conversationReference,
-                turnContext -> turnContext.sendActivities(activities).thenApply(resourceResponse -> null));
-    }
-
-    public MessageManager setTurnContext(TurnContext turnContext) {
-        this.turnContext = turnContext;
-        return this;
+        Application.getBotFrameworkHttpAdapter().continueConversation(Application.getConfigurationFile().getProperty(MicrosoftAppCredentials.MICROSOFTAPPID), conversationReference, turnContext -> turnContext.sendActivities(activities).thenApply(resourceResponse -> null));
     }
 }

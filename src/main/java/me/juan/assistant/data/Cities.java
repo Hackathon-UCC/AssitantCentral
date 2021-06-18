@@ -29,11 +29,12 @@ public enum Cities {
     QUIBDO("Quibdó"),
     SANTA_MARTA("Santa Marta");
 
-    private final String displayName;
     private static ArrayList<String> cities;
+    private final String displayName;
 
     public static ArrayList<String> getCities() {
-        if(cities == null) cities = Arrays.stream(Cities.values()).map(Cities::getDisplayName).sorted().collect(Collectors.toCollection(ArrayList::new));
+        if (cities == null)
+            cities = Arrays.stream(Cities.values()).map(Cities::getDisplayName).sorted().collect(Collectors.toCollection(ArrayList::new));
         return cities;
     }
 }

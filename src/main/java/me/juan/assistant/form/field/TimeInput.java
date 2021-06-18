@@ -1,6 +1,5 @@
 package me.juan.assistant.form.field;
 
-import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import me.juan.assistant.form.FieldType;

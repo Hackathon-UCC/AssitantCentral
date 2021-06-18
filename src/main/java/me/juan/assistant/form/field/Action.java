@@ -20,6 +20,11 @@ public class Action extends FormField {
         this.title = title;
     }
 
+    public Action(String title) {
+        super(FieldType.ACTION_SUBMIT);
+        this.title = title;
+    }
+
     public Action addData(String k, Object v) {
         if (data == null) data = new HashMap<>();
         data.put(k, v);

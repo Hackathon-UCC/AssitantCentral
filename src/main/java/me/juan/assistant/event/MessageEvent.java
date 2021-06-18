@@ -8,7 +8,6 @@ import me.juan.event.Event;
 import me.juan.event.HandlerList;
 
 @Getter
-
 public class MessageEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();

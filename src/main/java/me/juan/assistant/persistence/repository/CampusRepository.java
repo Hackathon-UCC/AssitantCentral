@@ -11,5 +11,4 @@ public interface CampusRepository extends CrudRepository<Campus, Integer> {
 
     Optional<Campus> findCampusByDomainIgnoreCase(String domain);
 
-
 }

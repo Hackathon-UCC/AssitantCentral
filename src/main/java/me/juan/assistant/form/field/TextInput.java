@@ -1,6 +1,5 @@
 package me.juan.assistant.form.field;
 
-import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import me.juan.assistant.form.FieldType;
@@ -13,7 +12,7 @@ public class TextInput extends FormField {
     private String style = "text";
     private Integer maxLength;
     private Boolean isRequired = null, isMultiline = null;
-    private String placeholder, label, errorMessage, regex;
+    private String placeholder, errorMessage, regex;
     private Object value;
 
     public TextInput() {

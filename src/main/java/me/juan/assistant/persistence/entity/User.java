@@ -17,6 +17,7 @@ import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -48,7 +49,6 @@ public class User {
     private Timestamp updated_at;
     private String id_teams;
     private String city;
-    private String phone;
 
     @Column(name = "conversation_reference")
     private String conversationReference;
@@ -129,5 +129,9 @@ public class User {
     @Override
     public boolean equals(Object user) {
         return ((User) user).getId().equals(getId());
+    }
+
+    public void sendMessage(ArrayList<Activity> activities) {
+        getMessageManager().sendMessage(activities);
     }
 }

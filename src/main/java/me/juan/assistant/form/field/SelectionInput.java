@@ -1,19 +1,17 @@
 package me.juan.assistant.form.field;
 
-import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import me.juan.assistant.form.FieldType;
 import me.juan.assistant.form.FormField;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 @Setter
 @Accessors(chain = true)
 public class SelectionInput extends FormField {
 
-    private String value, placeholder, errorMessage, label;
+    private String value, placeholder, errorMessage, style;
     private Boolean wrap, isMultiSelect, isRequired, separator;
     private ArrayList<Choice> choices;
 
@@ -21,7 +19,7 @@ public class SelectionInput extends FormField {
         super(FieldType.INPUT_CHOICE);
     }
 
-    public SelectionInput setChoices(String...cs) {
+    public SelectionInput setChoices(String... cs) {
         ArrayList<Choice> objects = new ArrayList<>();
         for (String c : cs) {
             objects.add(new Choice(c));
@@ -47,7 +45,7 @@ public class SelectionInput extends FormField {
 
 
     public static class Choice {
-        private final String title,value;
+        private final String title, value;
 
         public Choice(String title) {
             this.title = title;
