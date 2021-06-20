@@ -8,7 +8,10 @@ import com.microsoft.bot.schema.ThumbnailCard;
 import me.juan.assistant.persistence.entity.User;
 import me.juan.assistant.utils.CommonUtil;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class MenuCommand extends Command {

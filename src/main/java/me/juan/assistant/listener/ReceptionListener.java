@@ -32,8 +32,7 @@ public class ReceptionListener extends ActivityHandler implements Listener {
         if (user.getManager().checkCommand(message.toLowerCase())) return;
         new Thread(() -> {
             FormResponse send = new Form(new TextBlock("**¿Quieres mirar el menu?**")).setActions(new Action("Si").addStyle(), new Action("No").setCancel()).setSpeak("¿Quieres entrar al menu?").send(user, "No te entendí muy bien...");
-            user.sendMessage(send.isCanceled() ? "Okay, recuerda que estoy para ayudarte, ten un lindo dia!" : "Es un placer!");
-            if(!send.isCanceled()) user.getManager().checkCommand("menu");
+            if (!send.isCanceled()) user.getManager().checkCommand("menu");
         }).start();
     }
 

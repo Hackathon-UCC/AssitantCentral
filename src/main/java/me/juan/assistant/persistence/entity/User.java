@@ -14,6 +14,8 @@ import lombok.experimental.Accessors;
 import me.juan.assistant.manager.MessageManager;
 import me.juan.assistant.manager.UserManager;
 import net.minidev.json.annotate.JsonIgnore;
+import org.joda.time.Instant;
+import org.joda.time.format.DateTimeFormat;
 
 import javax.persistence.*;
 import java.sql.Timestamp;

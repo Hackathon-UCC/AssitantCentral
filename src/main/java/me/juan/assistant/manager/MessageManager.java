@@ -65,7 +65,9 @@ public class MessageManager {
     }
 
     public void sendMessage(String... a) {
-        for (String s : a) { outPuts.add(MessageFactory.text(s)); }
+        for (String s : a) {
+            outPuts.add(MessageFactory.text(s));
+        }
     }
 
     public void sendMessage(ArrayList<Activity> activities) {

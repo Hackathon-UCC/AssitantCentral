@@ -14,6 +14,7 @@ public class Column {
     private String type = "Column", verticalContentAlignment = "Center", horizontalAlignment = "Center", width;
 
     private ArrayList<Object> items;
+
     public Column setItems(Object... fF) {
         this.items = new ArrayList<>(Arrays.asList(fF));
         return this;

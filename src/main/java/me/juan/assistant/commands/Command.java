@@ -3,6 +3,7 @@ package me.juan.assistant.commands;
 import com.microsoft.bot.schema.ActionTypes;
 import com.microsoft.bot.schema.CardAction;
 import lombok.Getter;
+import lombok.Setter;
 import me.juan.assistant.form.Form;
 import me.juan.assistant.form.FormResponse;
 import me.juan.assistant.form.field.Action;
@@ -22,9 +23,11 @@ public abstract class Command {
     private final String command, description;
     private final List<Role> roles;
     private final CardAction cardAction;
+    @Setter
+    private boolean disableMessage;
 
     public Command(List<String> aliases, String command, String description, List<Role> roles, String displayMenu) {
-        this(aliases, command, description, roles, new CardAction(ActionTypes.IM_BACK, displayMenu, command));
+        this(aliases, command, description, roles, new CardAction(ActionTypes.IM_BACK, displayMenu, displayMenu));
     }
 
     public Command(List<String> aliases, String command, String description, List<Role> roles, CardAction cardAction) {
@@ -39,9 +42,9 @@ public abstract class Command {
     public void onCall(User user, String command) {
         new Thread(() -> {
             execute(user, command);
-            if (Command.this.cardAction != null) {
+            if (Command.this.cardAction != null && !disableMessage) {
                 FormResponse send = new Form(new TextBlock("¿Te puedo ayudar en algo mas?")).setActions(new Action("Si").addStyle(), new Action("No").setCancel()).send(user);
-                if(send.isCanceled()) {
+                if (send.isCanceled()) {
                     user.sendMessage("Dale!, que tengas un dia espectacular!");
                     return;
                 }

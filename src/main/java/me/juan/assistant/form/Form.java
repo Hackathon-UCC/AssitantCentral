@@ -24,10 +24,10 @@ public class Form {
             $schema = "http://adaptivecards.io/schemas/adaptive-card.json",
             type = "AdaptiveCard",
             version = "1.3";
-    private String speak;
     private final ArrayList<Object> body;
     @JsonIgnore
     private final Double formId;
+    private String speak;
     private ArrayList<Action> actions;
     private ArrayList<Object> buttons;
 
@@ -36,21 +36,20 @@ public class Form {
 
 
     public Form(String title, Object... fF) {
-        if(title != null) {
+        if (title != null) {
             this.speak = title;
             this.body = new ArrayList<>(Collections.singletonList(new TextBlock("**" + title + "**").setSpacing("medium").setSize("medium").setHorizontalAlignment("center").setWeight("bolder").setSeparator(true)));
-        }
-        else this.body = new ArrayList<>();
+        } else this.body = new ArrayList<>();
         this.body.addAll(Arrays.asList(fF));
         this.formId = Math.random() * 10000;
     }
 
-    public void sendAsMessage() {
-
+    public Form(Object... fF) {
+        this(null, fF);
     }
 
-    public Form(Object... fF) {
-        this(null,fF);
+    public void sendAsMessage() {
+
     }
 
     public Activity get() {
@@ -66,7 +65,7 @@ public class Form {
         HashMap<String, String> objectObjectHashMap = new HashMap<>();
         Arrays.stream(input.split("\\?")).parallel().forEach(s -> {
             String[] split1 = s.split("=");
-            objectObjectHashMap.put(split1[0].replace(" ", ""), split1.length <2 ? null : split1[1]);
+            objectObjectHashMap.put(split1[0].replace(" ", ""), split1.length < 2 ? null : split1[1]);
         });
         Object formId = objectObjectHashMap.getOrDefault("formId", null);
         if (formId == null || !formId.equals(this.formId.toString())) return response(user);
@@ -75,7 +74,9 @@ public class Form {
 
     public FormResponse send(User user, String... prevMessages) {
         ArrayList<Activity> activities = new ArrayList<>();
-        for (String s : prevMessages) { activities.add(MessageFactory.text(s)); }
+        for (String s : prevMessages) {
+            activities.add(MessageFactory.text(s));
+        }
         activities.add(get());
         user.sendMessage(activities);
         formResponse = new FormResponse(response(user));
@@ -99,7 +100,7 @@ public class Form {
     }
 
     public Attachment toAttachment() {
-        if(actions != null) actions.forEach(formField -> formField.addData("formId", formId));
+        if (actions != null) actions.forEach(formField -> formField.addData("formId", formId));
         Attachment attachment = new Attachment();
         attachment.setContent(this);
         attachment.setContentType("application/vnd.microsoft.card.adaptive");

@@ -20,13 +20,13 @@ public class ColumnSet {
     }
 
     public ColumnSet addColumn(Object... fF) {
-        if(this.columns == null) this.columns = new ArrayList<>();
+        if (this.columns == null) this.columns = new ArrayList<>();
         this.columns.add(new Column().setItems(fF));
         return this;
     }
 
     public ColumnSet addColumn(String width, Object... fF) {
-        if(this.columns == null) this.columns = new ArrayList<>();
+        if (this.columns == null) this.columns = new ArrayList<>();
         this.columns.add(new Column().setItems(fF).setWidth(width));
         return this;
     }

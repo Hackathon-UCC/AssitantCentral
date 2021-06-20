@@ -23,7 +23,7 @@ public class ReminderCommand extends Command {
         String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date(CommonUtil.getCurrentTimeMilis() * 1000 * 5));
         FormResponse responseForm = new Form("Crear una alarma", new ColumnSet()
                 .addColumn(new TextInput().setPlaceholder("Nombre del recordatorio").setId("nombre"),
-                new DateInput().setMin(currentDate).setPlaceholder("Fecha del recordatorio").setId("date"))
+                        new DateInput().setMin(currentDate).setPlaceholder("Fecha del recordatorio").setId("date"))
                 .addColumn("100px", new ImageBlock().setUrl("https://i.ibb.co/j3sYHDd/icons8-clock-alert-720px.png").centerImage().setSeparator(true)))
                 .setActions(new Action("Programar hora").addStyle(), new Action("Cancelar").setCancel()).send(user);
         String date = responseForm.get("date"), nombre = responseForm.get("nombre");

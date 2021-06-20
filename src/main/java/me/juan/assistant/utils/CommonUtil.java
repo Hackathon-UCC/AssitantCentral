@@ -1,13 +1,14 @@
 package me.juan.assistant.utils;
 
 import com.microsoft.bot.schema.teams.TeamsChannelAccount;
-import lombok.NonNull;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
+import org.joda.time.Instant;
+import org.joda.time.format.DateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 public class CommonUtil {
@@ -32,7 +33,15 @@ public class CommonUtil {
     }
 
     public static DateTime getJodaDate() {
-        return new DateTime(DateTimeZone.forID("America/Bogota"));
+        return new DateTime();
+    }
+
+    public static Timestamp dateToTimestamp(String date) {
+        return Timestamp.from(Instant.parse(date, DateTimeFormat.forPattern("dd/MM/yyyy")).toDate().toInstant());
+    }
+
+    public static Timestamp timeToTimestamp(String time) {
+        return Timestamp.from(Instant.parse(time, DateTimeFormat.forPattern("HH:mm")).toDate().toInstant());
     }
 
     public static TeamsChannelAccount getTeamsChannelAccount() {

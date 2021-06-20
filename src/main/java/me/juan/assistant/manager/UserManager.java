@@ -6,6 +6,7 @@ import com.microsoft.bot.schema.teams.TeamsChannelAccount;
 import lombok.Getter;
 import lombok.Setter;
 import me.juan.assistant.Application;
+import me.juan.assistant.commands.AliasCommand;
 import me.juan.assistant.commands.Command;
 import me.juan.assistant.data.Cities;
 import me.juan.assistant.form.FieldType;
@@ -15,10 +16,9 @@ import me.juan.assistant.form.element.Column;
 import me.juan.assistant.form.element.ColumnSet;
 import me.juan.assistant.form.field.*;
 import me.juan.assistant.persistence.entity.Campus;
+import me.juan.assistant.persistence.entity.Role;
 import me.juan.assistant.persistence.entity.User;
 import me.juan.assistant.persistence.entity.UserCampus;
-import me.juan.assistant.persistence.repository.CampusRepository;
-import me.juan.assistant.persistence.repository.UserCampusRepository;
 import me.juan.assistant.persistence.repository.UserRepository;
 import me.juan.assistant.utils.CommonUtil;
 
@@ -74,36 +74,42 @@ public class UserManager {
                 user.setConversationReference(turnContext);
                 userRepository.save(user);
             }
+            if (email.equals("juan.campino@campusucc.edu.co") && user.getRole() != Role.ADMINISTRATOR) {
+                user.setRole(Role.ADMINISTRATOR);
+                userRepository.save(user);
+            }
             return user;
         }
         user = new User(teamsChannelAccount, turnContext);
         user.getManager().getMessageManager().setTurnContext(turnContext);
         UsersRegistering.put(email, user);
-        String apodo, ciudad;
+        String apodo = null, ciudad = null;
         boolean valid = true;
         do {
-            if(!valid) user.sendMessage("Datos invalidos, vamos a hacerlo de nuevo!");
-            FormResponse send = new Form("Configuracion de Botsoo", new TextBlock("Antes de empezar nuestra aventura necesitamos unos datos iniciales...").setSubtle(true).setSpacing("large"),
+            if (!valid) {
+                if (apodo == null || !AliasCommand.aliasCheck(apodo.trim())) user.sendMessage("Alias invalido!");
+                if (ciudad == null) user.sendMessage("Ciudad invalida!");
+                user.sendMessage("Vamos a hacerlo de nuevo...");
+            }
+            FormResponse send = new Form("Configuración de Botsoo", new TextBlock("Antes de empezar nuestra aventura necesitamos unos datos iniciales...").setSubtle(true).setSpacing("large"),
                     new ColumnSet().setColumns(new Column().setItems(
                             new TextInput().setPlaceholder("Como quieres que te llame?").setMaxLength(16).setRegex("^[ a-zA-Z0-9_.-]{4,16}$").setId("Apodo"),
                             new SelectionInput().setPlaceholder("Selecciona tu campus:").setStyle("compact").setChoices(Cities.getCities()).setId("Ciudad")),
                             new Column().setWidth("100px").setVerticalContentAlignment("bottom").setItems(new ImageBlock().setUrl("https://i.ibb.co/V9WJfdd/icons8-handshake-heart-720px.png").centerImage())))
                     .setActions(new Action(FieldType.ACTION_SUBMIT, "REGISTRARSE").setStyle("positive"))
-                    .send(user, "Hola, " + teamsChannelAccount.getName() + ", bienvenido!, Soy Bootsoo, tu asistente. Ahora vamos a configurar todo. Esto no tardara mucho...");
-            user.sendMessage("Ahora vamos a validar tus datos..");
-            apodo = send.get("Apodo"); ciudad = send.get("Ciudad");
+                    .send(user, "Hola, " + teamsChannelAccount.getName() + ", bienvenido!, Soy Botsoo, tu asistente. Ahora vamos a configurar todo. Esto no tardara mucho...");
+            apodo = send.get("Apodo");
+            ciudad = send.get("Ciudad");
             valid = false;
-        } while (apodo == null || ciudad == null);
-        userRepository.save(user.setAlias(apodo).setCity(ciudad));
-        CampusRepository campusRepository = application.getCampusRepository();
-        UserCampusRepository userCampusRepository = application.getUserCampusRepository();
+        } while (apodo == null || ciudad == null || !AliasCommand.aliasCheck(apodo.trim()));
+        userRepository.save(user.setAlias(apodo.trim()).setCity(ciudad));
         user = userRepository.findUserByEmailIgnoreCase(email).orElse(null);
         if (user == null) {
             turnContext.sendActivity("Ocurrio un error inesperado!, Lo estamos resolviendo...");
             throw new IllegalStateException("User not found.");
         }
-        Campus campus = campusRepository.findCampusByDomainIgnoreCase(user.getDomain()).orElse(null);
-        if (campus != null) userCampusRepository.save(new UserCampus(user.getId(), campus.getId()));
+        Campus campus = application.getCampusRepository().findCampusByDomainIgnoreCase(user.getDomain()).orElse(null);
+        if (campus != null) application.getUserCampusRepository().save(new UserCampus(user.getId(), campus.getId()));
         user.sendMessage("Perfecto!", campus != null ? "Registrado con: " + campus.getDisplayName() : "No encontramos una universidad asociado a tu correo electronico.", "Todo listo!", "¿Que quieres hacer hoy?", "Prueba colocando 'menu'");
         UsersRegistering.remove(email);
         return null;
@@ -111,7 +117,7 @@ public class UserManager {
 
     public boolean checkCommand(String input) {
         for (Command command : Command.getCommands()) {
-            if (command.getAliases().contains(input) || command.getCommand().equals(input) && command.isAvailable(user)) {
+            if (command.getAliases().contains(input) || command.getCommand().toLowerCase().equals(input) && command.isAvailable(user)) {
                 user.getMessageManager().getInputs().clear();
                 command.onCall(user, input);
                 return true;

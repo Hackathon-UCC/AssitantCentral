@@ -12,10 +12,7 @@ import com.microsoft.bot.integration.Configuration;
 import com.microsoft.bot.integration.spring.BotController;
 import com.microsoft.bot.integration.spring.BotDependencyConfiguration;
 import lombok.Getter;
-import me.juan.assistant.commands.ReminderCommand;
-import me.juan.assistant.commands.AliasCommand;
-import me.juan.assistant.commands.CityCommand;
-import me.juan.assistant.commands.MenuCommand;
+import me.juan.assistant.commands.*;
 import me.juan.assistant.listener.ReceptionListener;
 import me.juan.assistant.manager.UserManager;
 import me.juan.assistant.persistence.entity.User;
@@ -25,6 +22,7 @@ import me.juan.assistant.persistence.repository.UserRepository;
 import me.juan.assistant.task.MessageTask;
 import me.juan.assistant.utils.CommonUtil;
 import me.juan.event.EventManager;
+import org.joda.time.DateTimeZone;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -64,6 +62,7 @@ public class Application extends BotDependencyConfiguration {
     }
 
     public void loadCommands() {
+        new ImportDate();
         new MenuCommand();
         new ReminderCommand();
         new CityCommand();
@@ -81,6 +80,7 @@ public class Application extends BotDependencyConfiguration {
         loadTasks();
         loadRegisteredUsers();
         loadCommands();
+        DateTimeZone.setDefault(DateTimeZone.forID("America/Bogota"));
         ReceptionListener receptionListener = new ReceptionListener();
         EventManager.registerEvent(receptionListener);
         return receptionListener;
